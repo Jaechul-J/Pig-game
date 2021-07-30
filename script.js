@@ -8,20 +8,33 @@ const score1Elm = document.querySelector('#score--1');
 const current0Elm = document.querySelector('#current--0');
 const current1Elm = document.querySelector('#current--1');
 
-const diceEl = document.querySelector('.dice');
+const diceElm = document.querySelector('.dice');
 const btnNew = document.querySelector('.btn--new');
 const btnRoll = document.querySelector('.btn--roll');
 const btnHold = document.querySelector('.btn--hold');
 
-// Starting conditions
-score0Elm.textContent = 0;
-score1Elm.textContent = 0;
-diceEl.classList.add('hidden');
+let scores, currentScore, activePlayer, playing;
 
-const scores = [0, 0];
-let currentScore = 0;
-let activePlayer = 0;
-let playing = true;
+// Starting conditions
+const init = function () {
+  scores = [0, 0];
+  currentScore = 0;
+  activePlayer = 0;
+  playing = true;
+
+  score0Elm.textContent = 0;
+  score1Elm.textContent = 0;
+  current0Elm.textContent = 0;
+  current1Elm.textContent = 0;
+
+  diceElm.classList.add('hidden');
+  player0Elm.classList.remove('player--winner');
+  player1Elm.classList.remove('player--winner');
+  player0Elm.classList.add('player--active');
+  player1Elm.classList.remove('player--active');
+};
+
+init();
 
 const switchPlayer = function () {
   document.getElementById(`current--${activePlayer}`).textContent = 0;
@@ -38,8 +51,8 @@ btnRoll.addEventListener('click', function () {
     const dice = Math.trunc(Math.random() * 6) + 1;
 
     // 2. Display dice
-    diceEl.classList.remove('hidden');
-    diceEl.src = `dice-${dice}.png`;
+    diceElm.classList.remove('hidden');
+    diceElm.src = `dice-${dice}.png`;
     // 3. Check for rolled: 1
     if (dice !== 1) {
       // Add dice to current score
@@ -61,10 +74,10 @@ btnHold.addEventListener('click', function () {
     document.getElementById(`score--${activePlayer}`).textContent =
       scores[activePlayer];
     // 2. Check if player's score is >=100, finish the game
-    if (scores[activePlayer] >= 10) {
+    if (scores[activePlayer] >= 100) {
       // Finish the game
       playing = false;
-      diceEl.classList.add('hidden');
+      diceElm.classList.add('hidden');
       document
         .querySelector(`.player--${activePlayer}`)
         .classList.add('player--winner');
@@ -78,3 +91,5 @@ btnHold.addEventListener('click', function () {
     }
   }
 });
+
+btnNew.addEventListener('click', init);
